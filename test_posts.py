@@ -1,23 +1,28 @@
 from urllib.parse import urljoin
 import requests
+import pytest
 
 BASEURL = 'https://jsonplaceholder.typicode.com/'
 
 
 
 class TestApiPosts():
-    def test_responce(self):
-        posts_url = urljoin(BASEURL, 'posts')
+    @pytest.mark.parametrize('url, expected', [('posts', 200), ('posts/123', 404)])
+    def test_responce(self, url, expected):
+        posts_url = urljoin(BASEURL, url)
         response = requests.get(posts_url)
         posts_page_code = response.status_code
-        assert posts_page_code == 200
+        assert posts_page_code == expected
 
-    def test_create(self):
-        payload = {'title':'my simple test', 'body':'passed well', 'userId':'15'}
-        response = requests.post(urljoin(BASEURL, 'posts'), data=payload).json()
-        assert response['title'] == 'my simple test'
-        assert response['body'] == 'passed well'
-        assert response['userId'] == '15'
+    @pytest.mark.parametrize('title, body, uId, url', [('my simple test', 'passed well', '15', 'posts'), (None, None, None, 'posts')])
+    def test_create(self, title, body, uId, url):
+        payload = {'title':title, 'body':body, 'userId':uId}
+        response = requests.post(urljoin(BASEURL, url), data=payload).json()
+        print(response)
+        assert response['userId'] == uId
+        assert response['title'] == title
+        assert response['body'] == body
+
 
     def test_modify(self):
         payload = {'title': 'my simple test', 'userId': '15', 'id':'1'}
