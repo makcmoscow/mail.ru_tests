@@ -14,7 +14,7 @@ class TestApiPosts():
         posts_page_code = response.status_code
         assert posts_page_code == expected
 
-    @pytest.mark.parametrize('title, body, uId, url', [('my simple test', 'passed well', '15', 'posts'), (None, None, None, 'posts')])
+    @pytest.mark.parametrize('title, body, uId, url', [('my simple test', 'passed well', '15', 'posts')])
     def test_create(self, title, body, uId, url):
         payload = {'title':title, 'body':body, 'userId':uId}
         response = requests.post(urljoin(BASEURL, url), data=payload).json()
