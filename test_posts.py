@@ -47,13 +47,3 @@ class TestApiPosts():
     def test_check_post_not_exist(self, url_too_big_post_id):                               # поста атрибут text должен
         response = requests.get(urljoin(BASEURL, url_too_big_post_id))                      # быть равен {}
         assert response.text == '{}'
-
-
-
-
-
-
-
-
-# if __name__ == '__main__':
-#     TestApiPosts().test_modify()
